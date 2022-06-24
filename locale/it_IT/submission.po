@@ -332,6 +332,9 @@ msgstr "Dettagli di pubblicazione per la versione {$version}"
 msgid "submission.queries.production"
 msgstr "Discussioni durante la produzione"
 
+msgid "submission.copyrightHolder.other"
+msgstr "Altra dichiarazione di copyright"
+
 msgid "submission.copyrightOther.description"
 msgstr "Assegnare il copyright degli articoli pubblicati al seguente soggetto."
 

@@ -1,0 +1,38 @@
+/**
+ * css/customLocale.css
+ *
+ * Copyright (c) 2016-2020 Language Science Press
+ * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ *
+ */
+
+input.valueChanged, textArea.valueChanged {
+	background-color:#FFFF93 !important;
+}
+
+.customLocale__headerDescription {
+	padding-top: 0.5rem;
+	font-size: 14px;
+	line-height: 1.6em;
+}
+
+.pkpTable td.customLocale__itemCount {
+	font-size: 12px;
+	padding: 0.5rem 1rem;
+}
+
+.customLocale__cellTable {
+	border: inherit;
+}
+.customLocale__cellTable tr {
+	border-bottom: inherit;
+}
+
+.customLocale__cellHeader td {
+	font-weight: bold;
+}
+
+textarea.customLocale__fixedSize {
+	resize: none;
+}
+

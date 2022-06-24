@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-11-24 10:33+0000\n"
+"Last-Translator: Martin Brändle <martin.braendle@uzh.ch>\n"
+"Language-Team: Italian <http://translate.pkp.sfu.ca/projects/plugins/"
+"customLocale/it/>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.9.1\n"
+
+msgid "plugins.generic.customLocale.searchResultsCount"
+msgstr ""
+"Visualizzando {{ currentLocaleKeysList.length }} di {{ "
+"filteredKeysList.length }} risultati per \"{{ phraseSearched }}\"."
+
+msgid "plugins.generic.customLocale.fileDescription"
+msgstr ""
+"Inserire il testo nel corrispondente campo di testo personalizzato. Lasciare "
+"vuoto il campo di testo personalizzato se si deve utilizzare il testo "
+"predefinito OJS/OMP."
+
+msgid "plugins.generic.customLocale.searchDescription"
+msgstr ""
+"Inserire qui una chiave di localizzazione completa. Le chiavi trovate sono "
+"evidenziate."
+
+msgid "plugins.generic.customLocale.customLocaleFiles"
+msgstr "File di impostazione regionale"
+
+msgid "plugins.generic.customLocale.files.pageTitle"
+msgstr "Nome del file"
+
+msgid "plugins.generic.customLocale.customLocale"
+msgstr "Impostazione regionale"
+
+msgid "plugins.generic.customLocale.file.custom"
+msgstr "Testo personalizzato"
+
+msgid "plugins.generic.customLocale.file.reference"
+msgstr "Testo predefinito"
+
+msgid "plugins.generic.customLocale.file.edit"
+msgstr "Modifica {$nome del file}"
+
+msgid "plugins.generic.customLocale.file.editHeader"
+msgstr "Personalizzare i chiavi di localizzazione"
+
+msgid "grid.action.printChanges"
+msgstr "Scarica un file che elenca tutte le personalizzazioni effettuate."
+
+msgid "plugins.generic.customLocale.customize"
+msgstr "Personalizzare"
+
+msgid "plugins.generic.customLocale.localeKeyValue"
+msgstr "Valore"
+
+msgid "plugins.generic.customLocale.localeKey"
+msgstr "Chiave"
+
+msgid "plugins.generic.customLocale.path"
+msgstr "Azione"
+
+msgid "plugins.generic.customLocale.localeKey.description"
+msgstr "Inserire un'intera chiave di localizzazione da cercare."
+
+msgid "plugins.generic.customLocale.printChanges"
+msgstr "Scaricare la documentazione"
+
+msgid "plugins.generic.customLocale.noneCreated"
+msgstr "Nessun file trovato."
+
+msgid "plugins.generic.customLocale.saveAndContinue"
+msgstr "Salvare e continuare"
+
+msgid "plugins.generic.customLocale.search.key"
+msgstr "Ricerca della chiave"
+
+msgid "plugins.generic.customLocale.search.fileName"
+msgstr "Ricerca nei nomi dei file"
+
+msgid "plugins.generic.customLocale.description"
+msgstr ""
+"Questo plugin consente di personalizzare il testo dell'interfaccia utente "
+"predefinita utilizzata da OJS e OMP."
+
+msgid "plugins.generic.customLocale.name"
+msgstr "Plugin Locale personalizzato"

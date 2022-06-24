@@ -186,6 +186,9 @@ msgstr "{$role} Iscrizione"
 msgid "manager.people.syncUserDescription"
 msgstr "La sincronizzazione iscriverà tutti gli utenti inseriti nel ruolo e nella rivista specificati, all'interno dello stesso ruolo in questa rivista. Questa funzione permette a un insieme comune di utenti  (es. revisori) di essere sincronizzati tra due o più riviste."
 
+msgid "manager.sections.form.deactivateSection"
+msgstr "Disabilita questa sezione e non permettere di inserire nuovi articoli."
+
 msgid "manager.sections.abstractsNotRequired"
 msgstr "Abstracts non richiesti"
 
@@ -535,6 +538,33 @@ msgstr "Nome dell'etichetta"
 
 msgid "manager.setup.lists"
 msgstr "Liste"
+
+msgid "manager.setup.dateTime"
+msgstr "Date & ora"
+
+msgid "manager.setup.dateTime.descriptionTitle"
+msgstr "Formati di data e ora"
+
+msgid "manager.setup.dateTime.description"
+msgstr "Scegli il formato predefinito di data e ora. Un formato personalizzato può essere inserito usando gli speciali <a href='http://php.net/manual/en/function.strftime.php#refsect1-function.strftime-parameters'>caratteri di formattazione</a>."
+
+msgid "manager.setup.dateTime.longDate"
+msgstr "Data"
+
+msgid "manager.setup.dateTime.shortDate"
+msgstr "Data (Breve)"
+
+msgid "manager.setup.dateTime.time"
+msgstr "Ora"
+
+msgid "manager.setup.dateTime.longDateTime"
+msgstr "Data & Ora"
+
+msgid "manager.setup.dateTime.shortDateTime"
+msgstr "Data & Ora (Breve)"
+
+msgid "manager.setup.dateTime.custom"
+msgstr "Personalizzato"
 
 msgid "manager.setup.lockssEnable"
 msgstr ""
@@ -1827,6 +1857,9 @@ msgstr "Non convalidato."
 
 msgid "plugins.importexport.common.validation.success"
 msgstr "Convalida avvenuta con successo!"
+
+msgid "manager.setup.disableSubmissions"
+msgstr "Impedisci nuovi articoli"
 
 msgid "manager.setup.disableSubmissions.notAccepting"
 msgstr ""
