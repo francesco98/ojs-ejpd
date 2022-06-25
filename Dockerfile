@@ -62,6 +62,9 @@ RUN docker-php-ext-install gd \
     ldap
 RUN docker-php-ext-enable mysqli
 
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 COPY docker/exclude.list /tmp/exclude.list
 
 # Copy existing application directory contents
