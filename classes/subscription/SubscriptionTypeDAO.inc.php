@@ -168,7 +168,7 @@ class SubscriptionTypeDAO extends DAO {
 	 * @param $subscriptionType SubscriptionType
 	 * @return int Inserted subscription type ID
 	 */
-	function insertObject($subscriptionType) {
+	function insertObject($subscriptionType, $callHooks=true) {
 		$this->update(
 			'INSERT INTO subscription_types
 				(journal_id, cost, currency_code_alpha, duration, format, institutional, membership, disable_public_display, seq)
@@ -184,7 +184,8 @@ class SubscriptionTypeDAO extends DAO {
 				$subscriptionType->getMembership(),
 				(int) $subscriptionType->getDisablePublicDisplay(),
 				(float) $subscriptionType->getSequence(),
-			]
+			],
+			$callHooks
 		);
 
 		$subscriptionType->setId($this->getInsertId());

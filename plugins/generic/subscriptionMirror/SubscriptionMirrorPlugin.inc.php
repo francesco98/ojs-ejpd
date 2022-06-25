@@ -10,7 +10,7 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 		$success = parent::register($category, $path);
 
 		if ($success && $this->getEnabled()) {
-			HookRegistry::register('subscriptiontypedao::_insertobject', [$this, 'insertSubscriptionTypeData']);
+			HookRegistry::register('subscriptiontypeform::execute', [$this, 'insertSubscriptionTypeData'], HOOK_SEQUENCE_CORE);
 		}
 
 		return $success;
@@ -38,55 +38,70 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 		return __('plugins.generic.subscriptionMirror.description');
 	}
 
-	/**
-	 * Enable the settings form in the site-wide plugins list
-	 *
-	 * @return string
-	 */
-	public function isSitePlugin()
-	{
-		return true;
-	}
-
 	function updateSubscriptionTypeData($hookName, $params): bool
 	{
+		if (!self::endsWith($params[0], "type_id = ?")) {
+			return false;
+		}
+
+		$typeId = $params[1][1];
+
 		return false;
 	}
 
 	function insertSubscriptionTypeData($hookName, $params): bool
 	{
+
+		/** @var $subscriptionTypeForm SubscriptionTypeForm */
+		$subscriptionTypeForm = $params[0];
+
+		$locale = $subscriptionTypeForm->getRequiredLocale();
+
+		$name = $subscriptionTypeForm->getData('name');
+		$description = $subscriptionTypeForm->getData('description');
+
+		$membership = $subscriptionTypeForm->getData('membership');
+		$disablePublicDisplay = $subscriptionTypeForm->getData('disable_public_display');
+
 		/* @var $subscriptionTypeDAO SubscriptionTypeDAO */
 		$subscriptionTypeDAO = DAORegistry::getDAO('SubscriptionTypeDAO');
 
 		$currentSubscriptionType = $subscriptionTypeDAO->newDataObject();
-		$currentSubscriptionType->setJournalId($params[1][0]);
-		$currentSubscriptionType->setCost($params[1][1]);
-		$currentSubscriptionType->setCurrencyCodeAlpha($params[1][2]);
-		$currentSubscriptionType->setDuration($params[1][3]);
-		$currentSubscriptionType->setFormat($params[1][4]);
-		$currentSubscriptionType->setInstitutional($params[1][5]);
-		$currentSubscriptionType->setMembership($params[1][6]);
-		$currentSubscriptionType->setDisablePublicDisplay($params[1][7]);
-		$currentSubscriptionType->setSequence($params[1][8]);
+		$currentSubscriptionType->setJournalId($subscriptionTypeForm->journalId);
+		$currentSubscriptionType->setCost($subscriptionTypeForm->getData('cost'));
+		$currentSubscriptionType->setCurrencyCodeAlpha($subscriptionTypeForm->getData('currency'));
+		$currentSubscriptionType->setDuration($subscriptionTypeForm->getData('duration'));
+		$currentSubscriptionType->setFormat($subscriptionTypeForm->getData('format'));
+		$currentSubscriptionType->setInstitutional($subscriptionTypeForm->getData('institutional'));
+		$currentSubscriptionType->setMembership(is_null($membership) ? 0 : $membership);
+		$currentSubscriptionType->setDisablePublicDisplay(is_null($disablePublicDisplay) ? 0 : $disablePublicDisplay);
+		$currentSubscriptionType->setSequence(1000); // TODO: Change it
 
 		$journals = Application::getContextDAO()->getNames();
+		$locales = AppLocale::getSupportedLocales();
 
 		foreach ($journals as $journalId => $journalName) {
 			if ($journalId != $currentSubscriptionType->getJournalId()) {
 				$subscriptionType = clone $currentSubscriptionType;
 				$subscriptionType->setJournalId($journalId);
 
+				foreach ($locales as $localeId => $localeValue) {
+					$subscriptionType->setName($name[$locale], $localeId);
+					$subscriptionType->setDescription($description[$locale], $localeId);
+				}
+
 				$journalSubscriptionTypes = $subscriptionTypeDAO->getByJournalId($journalId)->toArray();
 
 				if (!self::isSubscriptionTypePresent($subscriptionType, $journalSubscriptionTypes)) {
-					$subscriptionTypeDAO->insertObject($subscriptionType);
+					$subscriptionTypeDAO->insertObject($subscriptionType, false);
 				}
 			}
 		}
 
-		return true;
+		return false;
 	}
 
+	// TODO: Create a UNIQUE index on the DB
 	static function isSubscriptionTypeEqual(SubscriptionType $obj1, SubscriptionType $obj2): bool
 	{
 		return $obj1->getJournalId() == $obj2->getJournalId()

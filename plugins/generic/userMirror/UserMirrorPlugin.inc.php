@@ -10,7 +10,7 @@ class UserMirrorPlugin extends GenericPlugin
 		$success = parent::register($category, $path);
 
 		if ($success && $this->getEnabled()) {
-			HookRegistry::register('userdao::_updateobject', [$this, 'updateUserData']);
+			HookRegistry::register('userdao::_updateobject', [$this, 'updateUserData'], HOOK_SEQUENCE_CORE);
 		}
 
 		return $success;
@@ -38,16 +38,6 @@ class UserMirrorPlugin extends GenericPlugin
 		return __('plugins.generic.userMirror.description');
 	}
 
-	/**
-	 * Enable the settings form in the site-wide plugins list
-	 *
-	 * @return string
-	 */
-	public function isSitePlugin()
-	{
-		return true;
-	}
-
 	function updateUserData($hookName, $params): bool
 	{
 		// Safety check to be sure last element of the array is the user id
@@ -60,7 +50,7 @@ class UserMirrorPlugin extends GenericPlugin
 		$this->updateUserSettings($userId);
 		$this->updateUserRoles($userId);
 
-		return true;
+		return false;
 	}
 
 	function updateUserRoles($userId)
@@ -88,7 +78,7 @@ class UserMirrorPlugin extends GenericPlugin
 
 	function updateUserSettings($userId)
 	{
-		$locales = AppLocale::getAllLocales();
+		$locales = AppLocale::getSupportedLocales();
 		$primaryLocale = AppLocale::getPrimaryLocale();
 
 		/* @var $userDao UserDAO */
@@ -120,8 +110,7 @@ class UserMirrorPlugin extends GenericPlugin
 	static function isUserSettings(User $user, $locale): bool
 	{
 		return !is_null($user->getGivenName($locale))
-			&& !is_null($user->getFamilyName($locale))
-			&& !is_null($user->getAffiliation($locale));
+			&& !is_null($user->getFamilyName($locale));
 
 	}
 
