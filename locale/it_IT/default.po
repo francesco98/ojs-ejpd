@@ -14,6 +14,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.9.1\n"
 
+msgid "default.groups.name.reader"
+msgstr "Lettore"
+
+msgid "default.groups.name.externalReviewer"
+msgstr "Revisore"
+
 msgid "default.contextSettings.checklist.notPreviouslyPublished"
 msgstr "La submission non è stata precedentemente pubblicata, né proposta a un'altra rivista (oppure si fornisce una spiegazione all'editor nei commenti)."
 
