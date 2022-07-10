@@ -11,6 +11,7 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 
 		if ($success && $this->getEnabled()) {
 			HookRegistry::register('subscriptiontypeform::execute', [$this, 'insertSubscriptionTypeData'], HOOK_SEQUENCE_CORE);
+			HookRegistry::register('subscriptiontypedao::_deletebyid', [$this, 'deleteSubscriptionTypeData'], HOOK_SEQUENCE_CORE);
 		}
 
 		return $success;
@@ -38,13 +39,33 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 		return __('plugins.generic.subscriptionMirror.description');
 	}
 
-	function updateSubscriptionTypeData($hookName, $params): bool
+	function deleteSubscriptionTypeData($hookName, $params): bool
 	{
 		if (!self::endsWith($params[0], "type_id = ?")) {
 			return false;
 		}
 
-		$typeId = $params[1][1];
+		$typeId = $params[1][0];
+
+		/* @var $subscriptionTypeDAO SubscriptionTypeDAO */
+		$subscriptionTypeDAO = DAORegistry::getDAO('SubscriptionTypeDAO');
+
+		/* @var $subscriptionType SubscriptionType */
+		$currentSubscriptionType = $subscriptionTypeDAO->getById($typeId);
+
+		if(!is_null($currentSubscriptionType)) {
+			$journals = Application::getContextDAO()->getNames();
+
+			foreach ($journals as $journalId => $journalName) {
+				$subscriptionType = clone $currentSubscriptionType;
+				$subscriptionType->setJournalId($journalId);
+
+				$journalSubscriptionTypes = $subscriptionTypeDAO->getByJournalId($journalId)->toArray();
+				$existingTypeId = self::isSubscriptionTypePresent($subscriptionType, $journalSubscriptionTypes);
+
+				$subscriptionTypeDAO->deleteById($existingTypeId, $journalId, false);
+			}
+		}
 
 		return false;
 	}
@@ -75,7 +96,7 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 		$currentSubscriptionType->setInstitutional($subscriptionTypeForm->getData('institutional'));
 		$currentSubscriptionType->setMembership(is_null($membership) ? 0 : $membership);
 		$currentSubscriptionType->setDisablePublicDisplay(is_null($disablePublicDisplay) ? 0 : $disablePublicDisplay);
-		$currentSubscriptionType->setSequence(1000); // TODO: Change it
+		$currentSubscriptionType->setSequence(REALLY_BIG_NUMBER);
 
 		$journals = Application::getContextDAO()->getNames();
 		$locales = AppLocale::getSupportedLocales();
@@ -92,9 +113,17 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 
 				$journalSubscriptionTypes = $subscriptionTypeDAO->getByJournalId($journalId)->toArray();
 
-				if (!self::isSubscriptionTypePresent($subscriptionType, $journalSubscriptionTypes)) {
+				$existingTypeId = self::isSubscriptionTypePresent($subscriptionType, $journalSubscriptionTypes);
+
+				if (is_null($existingTypeId)) {
 					$subscriptionTypeDAO->insertObject($subscriptionType, false);
 				}
+				else {
+					$subscriptionType->setId($existingTypeId);
+					$subscriptionTypeDAO->updateObject($subscriptionType, false);
+				}
+
+				$subscriptionTypeDAO->resequenceSubscriptionTypes($journalId);
 			}
 		}
 
@@ -111,17 +140,24 @@ class SubscriptionMirrorPlugin extends GenericPlugin
 			&& $obj1->getMembership() == $obj2->getMembership();
 	}
 
-	static function isSubscriptionTypePresent(SubscriptionType $target, array $array): bool
+	static function isSubscriptionTypePresent(SubscriptionType $target, array $array): ?int
 	{
-		$found = false;
-
 		foreach ($array as $element) {
 			if (self::isSubscriptionTypeEqual($target, $element)) {
-				$found = true;
+				return $element->getId();
 			}
 		}
 
-		return $found;
+		return null;
+	}
+
+	static function endsWith($haystack, $needle): bool
+	{
+		$length = strlen($needle);
+		if (!$length) {
+			return true;
+		}
+		return substr($haystack, -$length) === $needle;
 	}
 
 

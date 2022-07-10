@@ -197,7 +197,7 @@ class SubscriptionTypeDAO extends DAO {
 	 * Update an existing subscription type.
 	 * @param $subscriptionType SubscriptionType
 	 */
-	function updateObject($subscriptionType) {
+	function updateObject($subscriptionType, $callHooks=true) {
 		$this->update(
 			'UPDATE subscription_types
 				SET
@@ -222,7 +222,8 @@ class SubscriptionTypeDAO extends DAO {
 				(int) $subscriptionType->getDisablePublicDisplay(),
 				(float) $subscriptionType->getSequence(),
 				(int) $subscriptionType->getId(),
-			]
+			],
+			$callHooks
 		);
 		$this->updateLocaleFields($subscriptionType);
 	}
@@ -233,13 +234,13 @@ class SubscriptionTypeDAO extends DAO {
 	 * @param $typeId int Subscription type ID
 	 * @param $journalId int Optional journal ID
 	 */
-	function deleteById($typeId, $journalId = null) {
+	function deleteById($typeId, $journalId = null, $callHooks=true) {
 		$subscriptionType = $this->getById($typeId, $journalId);
 		if ($subscriptionType) {
 			$subscriptionDao = DAORegistry::getDAO($subscriptionType->getInstitutional()?'InstitutionalSubscriptionDAO':'IndividualSubscriptionDAO');
 			$subscriptionDao->deleteById($typeId);
-			$this->update('DELETE FROM subscription_types WHERE type_id = ?', [(int) $typeId]);
-			$this->update('DELETE FROM subscription_type_settings WHERE type_id = ?', [(int) $typeId]);
+			$this->update('DELETE FROM subscription_types WHERE type_id = ?', [(int) $typeId], $callHooks);
+			$this->update('DELETE FROM subscription_type_settings WHERE type_id = ?', [(int) $typeId], $callHooks);
 		}
 	}
 
